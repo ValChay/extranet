@@ -1,0 +1,43 @@
+# extranet
+drupal 7 write form and download pdf
+
+function audit_menu() {
+	    $items = array();
+	    $items['audit'] = array(
+	      'title' => 'Audit',
+	      'type' => MENU_CALLBACK,
+	      'access arguments' => array('view audit'),
+	      'page callback' => 'audit_form',
+	      'page arguments' => array('audit_form'),
+	      'file' => 'audit.pages.inc',
+	    );
+	    $items['pdf/download/%'] = array(
+	      'title' => 'Download pdf',
+	      'type' => MENU_CALLBACK,
+	      'description' => 'PDF ',
+	      'access arguments' => array('view pdf'),
+	      'page arguments' => array(2),
+	      'page callback' => 'audit_download',
+	      'file' => 'audit.pages.inc',
+  		);
+  		$items['pdf'] = array(
+	      'title' => 'Download pdf',
+	      'type' => MENU_CALLBACK,
+	      'description' => 'PDF ',
+	      'access arguments' => array('view pdf'),
+	      'page callback' => 'audit_contents',
+	      'file' => 'audit.pages.inc',
+  		);
+	  return $items;
+	}
+	function audit_permission() {
+      $permissions = array(
+        'view audit' => array(
+          'title' => t('View audit'),
+        ),
+        'view pdf' => array(
+          'title' => t('View pdf'),  
+        ),
+      );
+      return $permissions;  
+	}
