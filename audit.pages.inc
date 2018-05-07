@@ -1,5 +1,5 @@
 function audit_my_form_submit($form, &$form_state) {
-require('/opt/ftp/aidopc_user/aidopc.fr/extranet/sites/all/libraries/fpdf181/fpdf.php');
+require('sites/all/libraries/fpdf181/fpdf.php');
   $audit = audit_new();
   $audit->is_new = empty($audit->aud_id);
   $form_state['audit'] = $audit;
