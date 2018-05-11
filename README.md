@@ -1,3 +1,3 @@
 # extranet
-TCPDF j'ai appellé audit_download() dans la function submit pour récupérer le array() $form
-mais une fois dans la function audit_download on ne peut pas exploité $form
+Avec PhpExcel on implemante dans le submit et sa génère un pdf que l'on peut organiser comme un excel (avec cellule)
+au moment du submit
