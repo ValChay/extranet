@@ -1,3 +1,3 @@
 # extranet
-VERSION 2 de LEXTRANET avec FPDF il y a besoin du $_POST pour récuperer les valeur et les mettres
-dans le PDF généré mais sous drupal 7 on utilise pas sa.
+TCPDF j'ai appellé audit_download() dans la function submit pour récupérer le array() $form
+mais une fois dans la function audit_download on ne peut pas exploité $form
