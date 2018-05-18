@@ -1,0 +1,55 @@
+function audit_my_form_submit($form, &$form_state) {
+
+require(DRUPAL_ROOT.'/sites/all/libraries/PHPExcel/Classes/PHPExcel/IOFactory.php');
+require(DRUPAL_ROOT.'/sites/all/libraries/PHPExcel/Classes/PHPExcel.php');
+
+  $audit = audit_new();
+  $audit->is_new = empty($audit->aud_id);
+  $form_state['audit'] = $audit;
+  if(empty($form_state['values']['aud_id']) || $form_state['values']['aud_id'] == 0) {
+    audit_save($audit);
+    //****************************** ENTREPRISE *******************************
+    $entreprise = entreprise_new();
+    $entreprise->soc_title_verif = $form_state['values']['soc_title_verif'];
+    $entreprise->soc_title_change = $form_state['values']['soc_title_change'];
+    $entreprise->title = $form_state['values']['title'];
+    $entreprise->is_new = empty($entreprise->ent_id);
+    $form_state['entreprise'] = $entreprise;
+    entreprise_save($entreprise);
+    $audit= &$form_state['audit'];
+    $audit->ent_id = $entreprise->ent_id;
+    audit_save($audit);
+    dpm('avant exel');
+
+ $inputFileName = '/opt/ftp/aidopc_user/aidopc.fr/extranet/sites/all/modules/audit_pdf/Audit/modele_audit.xls';
+//  Read your Excel workbook
+try {
+
+    $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+    $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+    $objPHPExcel = $objReader->load($inputFileName);
+    ob_end_clean();
+    header('Content-type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment; filename="audit.xls"');
+} catch(Exception $e) {
+    die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+}
+//  Get worksheet dimensions
+$sheet = $objPHPExcel->getSheet(0); 
+$highestRow = $sheet->getHighestRow(); 
+$highestColumn = $sheet->getHighestColumn();
+
+//  Loop through each row of the worksheet in turn
+for ($row = 1; $row <= $highestRow; $row++){ 
+    //  Read a row of data into an array
+    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                                    NULL,
+                                    TRUE,
+                                    FALSE);
+  //  Insert row data array into your database of choice here
+  //$objReader->save('php://output');
+
+     echo '<pre>';
+      print_r($rowData);
+    echo '</pre>';
+}
